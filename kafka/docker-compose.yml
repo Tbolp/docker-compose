@@ -1,0 +1,28 @@
+version: "2.2" # optional since v1.27.0
+services:
+
+  zookeeper:
+    image: openjdk:8-oracle
+    volumes: 
+      - ./kafka_2.13-2.8.0:/kafka
+    command: /kafka/bin/zookeeper-server-start.sh /kafka/config/zookeeper.properties
+    networks:
+      - internat
+
+  kafka:
+    image: openjdk:8-oracle
+    volumes: 
+      - ./kafka_2.13-2.8.0:/kafka
+    command: /kafka/bin/kafka-server-start.sh /kafka/config/server.properties
+    depends_on:
+      - zookeeper
+    ports: 
+      - 9092:9092
+    networks: 
+      - internat
+
+networks:
+  internat: {}
+
+# wget https://mirrors.sonic.net/apache/kafka/2.8.0/kafka_2.13-2.8.0.tgz
+# tar -xzf kafka_2.13-2.8.0.tgz

@@ -1,0 +1,35 @@
+version: "2.2" # optional since v1.27.0
+services:
+
+  ldap:
+    image: osixia/openldap:1.5.0
+    ports: 
+      - 389:389
+    environment:
+      - LDAP_ORGANISATION=Test
+      - LDAP_DOMAIN=test.com
+      - LDAP_ADMIN_PASSWORD=123456
+    volumes: 
+      - ./bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+    command: --copy-service
+    networks:
+      - internat
+
+  admin:
+    image: ldapaccountmanager/lam:7.5
+    ports:
+      - 5000:80
+    depends_on:
+      - ldap
+    environment:
+      - LDAP_SERVER=ldap://ldap:389
+      - LDAP_DOMAIN=test.com
+      - LDAP_BASE_DN=dc=test,dc=com
+      - LDAP_USER=cn=admin,dc=test,dc=com
+      - LAM_LANG=zh_CN
+      - LAM_PASSWORD=lam
+    networks: 
+      - internat
+
+networks:
+  internat: {}

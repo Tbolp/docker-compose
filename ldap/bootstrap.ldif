@@ -1,0 +1,11 @@
+
+dn: ou=Test,dc=test,dc=com
+ou: Test
+objectClass: organizationalUnit
+objectClass: top
+
+dn: cn=test,ou=Test,dc=test,dc=com
+cn: test
+objectClass: inetOrgPerson
+objectClass: top
+sn: test

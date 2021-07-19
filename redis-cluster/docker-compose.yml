@@ -1,0 +1,35 @@
+version: "2.2" # optional since v1.27.0
+services:
+  redis-node1:
+    image: redis:5
+    ports:
+      - 6379:6379
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis1.conf:/usr/local/etc/redis/redis.conf
+    network_mode: host
+
+  redis-node2:
+    image: redis:5
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis2.conf:/usr/local/etc/redis/redis.conf
+    network_mode: host
+
+  redis-node3:
+    image: redis:5
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis3.conf:/usr/local/etc/redis/redis.conf
+    network_mode: host
+
+  redis-node:
+    image: redis:5
+    command: redis-cli --cluster create 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 --cluster-yes --cluster-replicas 0
+    volumes:
+      - ./redis3.conf:/usr/local/etc/redis/redis.conf
+    depends_on:
+      - redis-node1
+      - redis-node2
+      - redis-node3
+    network_mode: host

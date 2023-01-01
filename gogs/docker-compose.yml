@@ -1,0 +1,10 @@
+version: "2.2" # optional since v1.27.0
+services:
+  web:
+    image: 'gogs/gogs:0.12'
+    # restart: always
+    ports:
+      - '3000:3000'
+      - '22:22'
+    volumes:
+      - 'F:/gogs:/data'
